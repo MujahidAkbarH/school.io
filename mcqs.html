@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQ Generator from PDF</title>
+    <!-- PDF.js library for PDF text extraction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            background: #6e62c3;
+            backdrop-filter: blur(12px);
+            z-index: 50;
+            border: 2px solid azure;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            border-radius: 30px;
+        }
+
+        .navbar .back-btn {
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .navbar .page-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Container */
+        .container {
+            margin-top: 100px;
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header Section */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            margin-bottom: 30px;
+        }
+
+        .upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            background: #f8f9ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            min-height: 150px;
+        }
+
+        .upload-label:hover {
+            background: #f0f2ff;
+            border-color: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .upload-label svg {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .upload-label span {
+            color: #667eea;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .file-name {
+            color: #28a745;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 10px 20px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .file-name.show {
+            display: block;
+        }
+
+        /* Action Section */
+        .action-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            position: relative;
+            min-width: 200px;
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .generate-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Loader Animation */
+        .btn-loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Output Section */
+        .output-section {
+            margin-top: 40px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .output-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .mcq-output {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 30px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        /* MCQ Item Styling */
+        .mcq-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .mcq-item:hover {
+            transform: translateX(5px);
+        }
+
+        .mcq-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .mcq-number {
+            color: #667eea;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .mcq-options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .mcq-option {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #ddd;
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+
+        .mcq-option:hover {
+            background: #e9ecef;
+        }
+
+        .mcq-option.correct {
+            background: #d4edda;
+            border-left-color: #28a745;
+            font-weight: 600;
+            color: #155724;
+        }
+
+        .option-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-right: 10px;
+        }
+
+        /* Error Message */
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #dc3545;
+            font-weight: 500;
+        }
+
+        /* Scrollbar Styling */
+        .mcq-output::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .mcq-output::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .mcq-output::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .mcq-output::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                border-radius: 15px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .upload-label {
+                padding: 30px 20px;
+                min-height: 120px;
+            }
+
+            .generate-btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+                min-width: 180px;
+            }
+
+            .mcq-output {
+                padding: 20px;
+            }
+
+            .mcq-question {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .upload-label {
+                padding: 25px 15px;
+            }
+        }
+    </style>
+    <nav class="navbar">
+        <a href="./home.html" class="back-btn">← Back</a>
+        <div class="logo">AI Education Assistant</div>
+        <div class="page-title">MCQs Generator</div>
+    </nav>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <h1>MCQ Generator from PDF</h1>
+            <p class="subtitle">Upload a PDF file and generate multiple choice questions automatically</p>
+        </header>
+
+        <!-- Upload Section -->
+        <section class="upload-section">
+            <div class="upload-container">
+                <label for="pdfUpload" class="upload-label">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <span id="uploadText">Choose PDF File</span>
+                </label>
+                <input type="file" id="pdfUpload" accept=".pdf" hidden>
+                <div id="fileName" class="file-name"></div>
+            </div>
+        </section>
+
+        <!-- Generate Button -->
+        <section class="action-section">
+            <button id="generateBtn" class="generate-btn" disabled>
+                <span class="btn-text">Generate MCQs</span>
+                <span class="btn-loader" id="loader" style="display: none;"></span>
+            </button>
+        </section>
+
+        <!-- Output Section -->
+        <section class="output-section" id="outputSection" style="display: none;">
+            <h2>Generated MCQs</h2>
+            <div id="mcqOutput" class="mcq-output"></div>
+        </section>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Initialize PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        // DOM Elements
+        const pdfUpload = document.getElementById('pdfUpload');
+        const uploadText = document.getElementById('uploadText');
+        const fileName = document.getElementById('fileName');
+        const generateBtn = document.getElementById('generateBtn');
+        const outputSection = document.getElementById('outputSection');
+        const mcqOutput = document.getElementById('mcqOutput');
+        const errorMessage = document.getElementById('errorMessage');
+
+        let uploadedFile = null;
+        let extractedText = '';
+
+        /**
+         * Handle PDF file selection
+         */
+        pdfUpload.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                // Validate file type
+                if (file.type !== 'application/pdf') {
+                    showError('Please upload a valid PDF file.');
+                    resetUpload();
+                    return;
+                }
+
+                // Validate file size (max 10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    showError('File size should be less than 10MB.');
+                    resetUpload();
+                    return;
+                }
+
+                uploadedFile = file;
+                uploadText.textContent = 'PDF Selected';
+                fileName.textContent = `📄 ${file.name}`;
+                fileName.classList.add('show');
+                generateBtn.disabled = false;
+                hideError();
+            }
+        });
+
+        /**
+         * Handle Generate MCQs button click
+         */
+        generateBtn.addEventListener('click', async function () {
+            if (!uploadedFile) {
+                showError('Please upload a PDF file first.');
+                return;
+            }
+
+            // Show loading state
+            generateBtn.disabled = true;
+            document.querySelector('.btn-text').textContent = 'Generating...';
+            document.getElementById('loader').style.display = 'inline-block';
+            hideError();
+            outputSection.style.display = 'none';
+
+            try {
+                // Extract text from PDF
+                extractedText = await extractTextFromPDF(uploadedFile);
+
+                if (!extractedText || extractedText.trim().length === 0) {
+                    throw new Error('No text could be extracted from the PDF. Please ensure the PDF contains readable text.');
+                }
+
+                // Generate MCQs (using placeholder function - replace with actual API call)
+                const mcqs = await generateMCQs(extractedText);
+
+                // Display MCQs
+                displayMCQs(mcqs);
+                outputSection.style.display = 'block';
+
+            } catch (error) {
+                showError(error.message || 'An error occurred while processing the PDF. Please try again.');
+                console.error('Error:', error);
+            } finally {
+                // Reset button state
+                generateBtn.disabled = false;
+                document.querySelector('.btn-text').textContent = 'Generate MCQs';
+                document.getElementById('loader').style.display = 'none';
+            }
+        });
+
+        /**
+         * Extract text from PDF using PDF.js
+         * @param {File} file - The PDF file to extract text from
+         * @returns {Promise<string>} - Extracted text from PDF
+         */
+        async function extractTextFromPDF(file) {
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+                let fullText = '';
+                const numPages = pdf.numPages;
+
+                // Extract text from all pages
+                for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                    const page = await pdf.getPage(pageNum);
+                    const textContent = await page.getTextContent();
+
+                    // Combine all text items from the page
+                    const pageText = textContent.items
+                        .map(item => item.str)
+                        .join(' ');
+
+                    fullText += pageText + '\n';
+                }
+
+                return fullText.trim();
+            } catch (error) {
+                throw new Error('Failed to extract text from PDF: ' + error.message);
+            }
+        }
+
+        /**
+         * Generate MCQs from extracted text
+         * This is a placeholder function - replace with actual API call (e.g., Gemini API)
+         * @param {string} text - The text to generate MCQs from
+         * @returns {Promise<Array>} - Array of MCQ objects
+         */
+        async function generateMCQs(text) {
+            // Simulate API call delay
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // PLACEHOLDER: Generate sample MCQs
+            // In production, replace this with an actual API call to Gemini or another AI service
+            // Example API call structure:
+            /*
+            const response = await fetch('YOUR_API_ENDPOINT', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer YOUR_API_KEY'
+                },
+                body: JSON.stringify({
+                    text: text,
+                    numQuestions: 20,
+                    optionsPerQuestion: 4
+                })
+            });
+            const data = await response.json();
+            return data.mcqs;
+            */
+
+            // For demonstration, generate sample MCQs based on text length
+            const sampleMCQs = generateSampleMCQs(text);
+            return sampleMCQs;
+        }
+
+        /**
+         * Generate sample MCQs (placeholder function)
+         * Replace this with actual API integration
+         * @param {string} text - The extracted text
+         * @returns {Array} - Array of MCQ objects
+         */
+        function generateSampleMCQs(text) {
+            const mcqs = [];
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 20);
+
+            // Generate 20 MCQs
+            for (let i = 0; i < 20; i++) {
+                const sentenceIndex = i % sentences.length;
+                const baseSentence = sentences[sentenceIndex]?.trim() || `Question ${i + 1} about the document`;
+
+                // Create a question from the sentence
+                const question = `What is the main point discussed in the following context: "${baseSentence.substring(0, 100)}..."?`;
+
+                // Generate options
+                const options = [
+                    `Option A: This relates to the first aspect mentioned in the text`,
+                    `Option B: This describes the primary concept discussed`,
+                    `Option C: This explains the secondary detail provided`,
+                    `Option D: This summarizes the overall theme`
+                ];
+
+                // Randomly assign correct answer (in production, API will provide this)
+                const correctIndex = Math.floor(Math.random() * 4);
+
+                mcqs.push({
+                    question: question,
+                    options: options,
+                    correctAnswer: correctIndex
+                });
+            }
+
+            return mcqs;
+        }
+
+        /**
+         * Display generated MCQs in the output area
+         * @param {Array} mcqs - Array of MCQ objects
+         */
+        function displayMCQs(mcqs) {
+            mcqOutput.innerHTML = '';
+
+            if (!mcqs || mcqs.length === 0) {
+                mcqOutput.innerHTML = '<p style="text-align: center; color: #666;">No MCQs were generated. Please try again.</p>';
+                return;
+            }
+
+            mcqs.forEach((mcq, index) => {
+                const mcqItem = document.createElement('div');
+                mcqItem.className = 'mcq-item';
+
+                // Question
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'mcq-question';
+                questionDiv.innerHTML = `<span class="mcq-number">${index + 1}.</span>${mcq.question}`;
+
+                // Options
+                const optionsList = document.createElement('ul');
+                optionsList.className = 'mcq-options';
+
+                const optionLabels = ['A', 'B', 'C', 'D'];
+                mcq.options.forEach((option, optIndex) => {
+                    const optionItem = document.createElement('li');
+                    optionItem.className = 'mcq-option';
+
+                    // Highlight correct answer
+                    if (optIndex === mcq.correctAnswer) {
+                        optionItem.classList.add('correct');
+                    }
+
+                    optionItem.innerHTML = `<span class="option-label">${optionLabels[optIndex]}.</span>${option}`;
+                    optionsList.appendChild(optionItem);
+                });
+
+                // Assemble MCQ item
+                mcqItem.appendChild(questionDiv);
+                mcqItem.appendChild(optionsList);
+                mcqOutput.appendChild(mcqItem);
+            });
+        }
+
+        /**
+         * Show error message
+         * @param {string} message - Error message to display
+         */
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        /**
+         * Hide error message
+         */
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+
+        /**
+         * Reset upload state
+         */
+        function resetUpload() {
+            uploadedFile = null;
+            uploadText.textContent = 'Choose PDF File';
+            fileName.classList.remove('show');
+            generateBtn.disabled = true;
+            pdfUpload.value = '';
+        }
+    </script>
+</body>
+
+</html>

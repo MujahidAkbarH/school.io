@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture Generator</title>
+    <style>
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        /* Navbar */
+        .navbar {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            background: #6e62c3;
+            backdrop-filter: blur(12px);
+            z-index: 50;
+            border: 2px solid azure;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            border-radius: 30px;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .navbar h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 100px auto 0;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Inputs & Textarea */
+        input,
+        textarea {
+            width: 100%;
+            background-color: white;
+            border: 1px solid #667eea;
+            color: #fff;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            margin-bottom: 20px;
+        }
+
+        input::placeholder {
+            color: ;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 8px #667eea;
+        }
+
+        /* Button */
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #667eea 100%);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px #667eea
+        }
+
+        /* Output Box */
+        .output {
+            margin-top: 30px;
+            background-color: #667eea;
+            color: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            line-height: 1.6;
+            min-height: 100px;
+        }
+
+        /* Headings inside output */
+        .output h3 {
+            margin-bottom: 15px;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .output p {
+            font-size: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+                margin: 60px 10px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="./home.html">← Back</a>
+        <h2>Lecture Generator</h2>
+    </nav>
+
+    <div class="container">
+        <input type="text" id="lectureTopic" placeholder="Lecture Topic">
+        <textarea id="lectureOutline" placeholder="Lecture Outline"></textarea>
+        <button id="generateBtn">Generate Lecture</button>
+
+        <div class="output" id="outputDiv"></div>
+    </div>
+
+    <script>
+        const generateBtn = document.getElementById('generateBtn');
+        const outputDiv = document.getElementById('outputDiv');
+        const lectureTopic = document.getElementById('lectureTopic');
+        const lectureOutline = document.getElementById('lectureOutline');
+
+        generateBtn.addEventListener('click', () => {
+            const topic = lectureTopic.value.trim();
+            const outline = lectureOutline.value.trim();
+
+            if (!topic || !outline) {
+                outputDiv.innerHTML = '<p>Please fill in all fields.</p>';
+                return;
+            }
+
+            outputDiv.innerHTML = `
+        <h3>${topic}</h3>
+        <p>${outline.replace(/\n/g, '<br>')}</p>
+    `;
+        });
+    </script>
+
+</body>
+
+</html>

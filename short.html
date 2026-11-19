@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Short Answers</title>
+
+    <style>
+        /* RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            background: #6e62c3;
+            backdrop-filter: blur(12px);
+            z-index: 50;
+            border: 2px solid azure;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            border-radius: 30px;
+        }
+
+        .navbar .back-btn {
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .navbar .page-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            width: 1000px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* SELECT */
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            font-size: 15px;
+            background: #f8f9ff;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        /* LARGE UPLOAD SECTION */
+        input[type="file"] {
+            width: 100%;
+            padding: 60px 20px;
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            background: #f8f9ff;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        input[type="file"]::file-selector-button {
+            display: none;
+        }
+
+        input[type="file"]::before {
+            content: "Upload PDF";
+            display: block;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            color: #667eea;
+            pointer-events: none;
+        }
+
+        input[type="file"]:hover {
+            background: #f0f2ff;
+            border-color: #764ba2;
+        }
+
+        /* BUTTON */
+        button {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* OUTPUT */
+        .output {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 24px;
+            min-height: 120px;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 16px;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container {
+                padding: 28px;
+                margin: 24px;
+            }
+
+            .navbar .page-title {
+                font-size: 14px;
+            }
+
+            input[type="file"] {
+                padding: 50px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 22px;
+            }
+
+            button {
+                font-size: 15px;
+            }
+
+            .navbar .logo {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="./home.html" class="back-btn">← Back</a>
+        <div class="logo">AI Education Assistant</div>
+        <div class="page-title">Short Answer Generator</div>
+    </nav>
+
+    <div class="container">
+        <select>
+            <option>Select Grade</option>
+            <option>1</option>
+            <option>5</option>
+            <option>10</option>
+        </select>
+
+        <input type="file" accept="application/pdf">
+
+        <button>Generate Short Answers</button>
+
+        <div class="output"></div>
+    </div>
+
+    <footer>
+        &copy; 2026 Star Kids Grammar Secondary School
+    </footer>
+
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="./short.js"></script>
+</body>
+
+</html>

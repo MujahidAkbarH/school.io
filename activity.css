@@ -1,0 +1,210 @@
+:root {
+  /* Design Tokens - Easy to change colors globally */
+  --bg-body: #09090b;       /* Slightly deeper black */
+  --bg-surface: #18181b;    /* Card/Element background */
+  --bg-surface-hover: #27272a;
+  
+  --border-subtle: #27272a;
+  --border-focus: #6366f1;  /* Indigo-500 */
+  
+  --text-main: #fafafa;
+  --text-muted: #a1a1aa;
+  
+  --primary: #6366f1;       /* Indigo */
+  --primary-hover: #4f46e5; /* Indigo Darker */
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-glow: 0 0 0 4px rgba(99, 102, 241, 0.15); /* Focus ring */
+  
+  --radius: 8px;
+  --transition: all 0.2s ease-in-out;
+}
+
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased; /* Smoother fonts on Mac */
+}
+
+/* Navbar */
+.navbar {
+  height: 70px; /* Slightly taller for breathing room */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Pushes content to edges */
+  padding: 0 32px;
+  
+  /* Glassmorphism Effect */
+  background: rgba(9, 9, 11, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.navbar .logo {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text-main);
+}
+
+.navbar-links {
+  display: flex;
+  gap: 24px; /* Uses gap instead of margin for better layout control */
+}
+
+.navbar a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.navbar a:hover {
+  color: var(--text-main);
+}
+
+/* Layout */
+.container {
+  max-width: 800px; /* Narrower for better reading experience */
+  margin: 60px auto;
+  padding: 0 24px;
+}
+
+.header-section {
+  margin-bottom: 40px;
+}
+
+.header-section h2 {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.header-section p {
+  color: var(--text-muted);
+}
+
+/* Form Group Wrapper */
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+/* Inputs & Textareas */
+input,
+select,
+textarea {
+  width: 100%;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  font-size: 15px; /* Slightly larger for legibility */
+  outline: none;
+  transition: var(--transition);
+}
+
+/* Interaction States for Inputs */
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: #3f3f46;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--border-focus);
+  background-color: #0e0e10;
+  box-shadow: var(--shadow-glow); /* Accessibility focus ring */
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical; /* Allow vertical resizing only */
+}
+
+/* Buttons */
+button {
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 14px 24px;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  
+  /* Flex center in case you add icons */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px); /* Subtle lift effect */
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); /* Colored shadow */
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.container {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: var(--shadow-sm);
+}
+
+.page {
+  min-height: calc(100vh - 70px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-section h2 {
+  font-size: 36px;
+}
+
+.header-section p {
+  font-size: 15px;
+}
+
+/* Fix for browser autofill turning inputs white */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #18181b inset !important;
+    -webkit-text-fill-color: #fafafa !important;
+    transition: background-color 5000s ease-in-out 0s;
+}

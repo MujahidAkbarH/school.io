@@ -1,0 +1,13 @@
+{
+  "name": "long-qa-generator",
+  "version": "1.0.0",
+  "description": "Generate long Q&A from PDF using Gemini API",
+  "main": "long_server.js",
+  "scripts": {
+    "start": "node long_server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}

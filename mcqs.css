@@ -1,0 +1,341 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+/* Container */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header Section */
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: #667eea;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* Upload Section */
+.upload-section {
+    margin-bottom: 30px;
+}
+
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    border: 3px dashed #667eea;
+    border-radius: 15px;
+    background: #f8f9ff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    min-height: 150px;
+}
+
+.upload-label:hover {
+    background: #f0f2ff;
+    border-color: #764ba2;
+    transform: translateY(-2px);
+}
+
+.upload-label svg {
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.upload-label span {
+    color: #667eea;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.file-name {
+    color: #28a745;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 10px 20px;
+    background: #e8f5e9;
+    border-radius: 8px;
+    display: none;
+}
+
+.file-name.show {
+    display: block;
+}
+
+/* Action Section */
+.action-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.generate-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    position: relative;
+    min-width: 200px;
+}
+
+.generate-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.generate-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.generate-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Loader Animation */
+.btn-loader {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Output Section */
+.output-section {
+    margin-top: 40px;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.output-section h2 {
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.mcq-output {
+    background: #f8f9ff;
+    border-radius: 15px;
+    padding: 30px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+/* MCQ Item Styling */
+.mcq-item {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.mcq-item:hover {
+    transform: translateX(5px);
+}
+
+.mcq-question {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.mcq-number {
+    color: #667eea;
+    font-weight: 700;
+    margin-right: 8px;
+}
+
+.mcq-options {
+    list-style: none;
+    padding: 0;
+}
+
+.mcq-option {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #ddd;
+    transition: all 0.2s ease;
+    cursor: default;
+}
+
+.mcq-option:hover {
+    background: #e9ecef;
+}
+
+.mcq-option.correct {
+    background: #d4edda;
+    border-left-color: #28a745;
+    font-weight: 600;
+    color: #155724;
+}
+
+.option-label {
+    font-weight: 600;
+    color: #667eea;
+    margin-right: 10px;
+}
+
+/* Error Message */
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    border-left: 4px solid #dc3545;
+    font-weight: 500;
+}
+
+/* Scrollbar Styling */
+.mcq-output::-webkit-scrollbar {
+    width: 8px;
+}
+
+.mcq-output::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.mcq-output::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 10px;
+}
+
+.mcq-output::-webkit-scrollbar-thumb:hover {
+    background: #764ba2;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 25px;
+        border-radius: 15px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .upload-label {
+        padding: 30px 20px;
+        min-height: 120px;
+    }
+
+    .generate-btn {
+        padding: 12px 30px;
+        font-size: 1rem;
+        min-width: 180px;
+    }
+
+    .mcq-output {
+        padding: 20px;
+    }
+
+    .mcq-question {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    .upload-label {
+        padding: 25px 15px;
+    }
+}
+

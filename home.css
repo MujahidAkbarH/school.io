@@ -1,0 +1,75 @@
+/* Home wrapper takes full height */
+.home-wrapper {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* Top title center */
+.home-nav {
+  justify-content: center;
+}
+
+.home-nav h1 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #e6e8eb;
+}
+
+/* Grid layout:
+   2 cards
+   2 cards
+   1 centered card */
+.home-grid {
+  width: 100%;
+  max-width: 900px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+/* Cards */
+.home-card {
+  background: #0b0e14;
+  border: 1px solid #1f2430;
+  border-radius: 20px;
+  padding: 26px;
+  text-decoration: none;
+  color: #e6e8eb;
+  transition: 0.25s ease;
+
+  /* PERFECT CENTER ALIGNMENT */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+
+/* Last card full width */
+.home-card.full {
+  grid-column: span 2;
+}
+
+/* Card text */
+.home-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.home-card p {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #9aa4b2;
+}
+
+/* Hover – subtle & professional */
+.home-card:hover {
+  border-color: #4f46e5;
+  transform: translateY(-3px);
+}
